@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTMX + Flowbite + FastAPI Modal</title>
+    <!-- Tailwind CSS & Flowbite -->
+    <script src="https://jsdelivr.net"></script>
+    <link href="https://jsdelivr.net" rel="stylesheet" />
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+    <!-- Trigger Button -->
+    <button 
+        hx-get="/modal" 
+        hx-target="#modal-container" 
+        hx-trigger="click"
+        class="block text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center" 
+        type="button">
+        Open Full Page Modal
+    </button>
+
+    <!-- Container where the modal fragment will be injected -->
+    <div id="modal-container"></div>
+
+    <!-- HTMX and Flowbite JS -->
+    <script src="https://unpkg.com"></script>
+    <script src="https://jsdelivr.net"></script>
+
+    <script>
+        // Flowbite initialization logic for dynamically injected HTMX content
+        document.body.addEventListener('htmx:afterSwap', function(evt) {
+            if (evt.detail.target.id === 'modal-container') {
+                const modalEl = document.getElementById('full-modal');
+                if (modalEl) {
+                    // Initialize and immediately show the Flowbite modal instance
+                    const modal = new Modal(modalEl, { backdrop: 'static' });
+                    modal.show();
+                    
+                    // Cleanup container when modal is hidden/closed
+                    modalEl.addEventListener('hide.fb.modal', () => {
+                        setTimeout(() => { modalEl.remove(); }, 300);
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

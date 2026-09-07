@@ -1,0 +1,37 @@
+<!-- Main Modal: Pakai 'flex flex-col' supaya elemen disusun murni dari atas ke bawah -->
+<div id="modal-div" tabindex="-1" aria-hidden="true" class="fixed inset-0 z-50 w-full h-full bg-[#181818] flex flex-col overflow-y-auto">
+    
+    <!-- HEADER BAR: Wajib dipasang 'flex items-center' di sini agar tombol X & Tab sejajar di atas -->
+    <div class="flex items-center gap-2 px-3 py-2 w-full shrink-0">
+        
+        <!-- Tombol Close -->
+        <button onclick="document.getElementById('modal-div')?._flowbiteModal?.hide()" class="cursor-pointer text-[#b9b9b9] rounded-lg transition-colors border border-[#343434] w-8 h-8 flex justify-center items-center">
+            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+            </svg>
+        </button>
+
+        <!-- Tab Menu -->
+        <div class="md:hidden border-b border-[#343434] w-full">
+            <ul class="flex flex-wrap -mb-px text-sm  text-center text-white ">
+                <li class="me-2">
+                    <a href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent hover:text-[#28a99e] group">
+                        Workspace
+                    </a>
+                </li>
+                <li class="me-2">
+                    <a href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-white hover:text-[#28a99e]  group" aria-current="page">
+                        Tasks
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- KONTEN UTAMA MODAL (Berada tepat di bawah header) -->
+    <div class="p-4 flex-1">
+        <!-- Isi konten modal kamu masuk di sini -->
+    </div>
+
+</div>

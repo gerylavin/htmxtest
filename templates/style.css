@@ -1,0 +1,85 @@
+body {
+    margin: 0;
+    font-size: 14px;
+    font-family: v-sans, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.mainjing{
+    background-color: #181818;
+}
+.testhead {
+    background-color: #181818;
+    border-color: #343434;
+    /* border-width: 5px;
+    border-style: solid; */
+    /* height: 500px;
+    width: 1000px; */
+    /* display: grid; */
+}
+
+/* CSS Styles */
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: #121212; /* Dark background context */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.split-btn-container {
+  display: inline-flex;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #6366f1 0%, #06b6d4 50%, #10b981 100%);
+  padding: 1px; /* Serves as a subtle outer border wrapper if desired */
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.split-btn-container button {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 12px 20px;
+  transition: background-color 0.2s ease;
+}
+
+.split-btn-container button:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.split-btn-container button:active {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.action-btn {
+  padding-right: 16px !important;
+}
+
+.action-btn .icon {
+  margin-right: 8px;
+}
+
+.dropdown-btn {
+  padding-left: 12px !important;
+  padding-right: 16px !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.4) !important; /* The vertical split divider */
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+}
