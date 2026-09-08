@@ -10,7 +10,7 @@
             <h3 class="text-lg w-full text-center font-semibold text-[#dfdfdf]">
                 Add new model
             </h3>
-            <button onclick="document.getElementById('modal-div')?._flowbiteModal?.hide()" type="button" class="cursor-pointer text-[#b9b9b9] rounded-lg transition-colors border border-[#343434] bg-transparent hover:bg-neutral-800 hover:text-white rounded-lg text-sm w-9 h-9 ms-auto inline-flex justify-center items-center">
+            <button onclick="document.getElementById('modal-div').remove()" type="button" class="cursor-pointer text-[#b9b9b9] rounded-lg transition-colors border border-[#343434] bg-transparent hover:bg-neutral-800 hover:text-white rounded-lg text-sm w-9 h-9 ms-auto inline-flex justify-center items-center">
                 <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
                 </svg>
@@ -34,7 +34,9 @@
                     <svg class="w-4 h-4 me-1.5 -ms-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/></svg>
                     Add
                 </button>
-                <button type="button" onclick="document.getElementById('modal-div')?._flowbiteModal?.hide()" class="cursor-pointer text-gray-300 bg-[#242424] border border-[#343434] hover:bg-neutral-800 hover:text-white font-medium rounded-lg text-sm px-4 py-2.5 focus:outline-none">Cancel</button>
+                <button type="button" onclick="document.getElementById('modal-div').remove()" class="cursor-pointer text-gray-300 bg-[#242424] border border-[#343434] hover:bg-neutral-800 hover:text-white font-medium rounded-lg text-sm px-4 py-2.5 focus:outline-none">
+                    Cancel
+                </button>
             </div>
         
 

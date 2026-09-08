@@ -96,7 +96,8 @@ async def add_models_ui(
             model_data=await fetch_model_data(modelId=modelId)
             try:
                 add_model=add_models_db(modelstams=model_data['model'],session=session)
-                return jinja.TemplateResponse(request,"toast.html")
+                return jinja.TemplateResponse(request,"toast.html",context={"message":"Model added sucessfully","status":200})
+                #return "<div>Data model berhasil ditambah!</div>"
             except Exception as e:
                 print(e)
                 
@@ -105,10 +106,11 @@ async def add_models_ui(
         
     else:
         print("Model exists")
-        raise HTTPException(
-            status_code=409, 
-            detail="Model exists"
-        )
+        return jinja.TemplateResponse(request,"toast.html",context={"message":"Model exists","status":409})
+        # raise HTTPException(
+        #     status_code=409, 
+        #     detail="Model exists"
+        # )
         
 
 #----------------- TAMS FUNCTION------------------------
@@ -149,7 +151,7 @@ def check_models_db(modelId:str, session:Session):
     return model
 
 def firstTenModels(session:Session):
-    statement=select(ModelsTams.projectName,ModelsTams.name,ModelsTams.showcaseImageUrls).distinct().where(ModelsTams.stack_order == 1).limit(10)
+    statement=select(ModelsTams.projectName,ModelsTams.name,ModelsTams.showcaseImageUrls).distinct().where(ModelsTams.stack_order == 1).limit(20)
     result=session.exec(statement).all()
     
     return result

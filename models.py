@@ -16,7 +16,8 @@ class ModelsTams(SQLModel, table=True):
     
     #By myself:
     stack_order:int | None = Field(default=None)
-    added_at: datetime = Field(default_factory=datetime.now)
+    is_liked:bool | None = Field(default=False)
     total_used :int | None = Field(default=0)
+    added_at: datetime = Field(default_factory=datetime.now)
     
     

@@ -7,11 +7,11 @@
     <link href="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.css" rel="stylesheet" />
     
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.10/dist/htmx.min.js" integrity="sha384-H5SrcfygHmAuTDZphMHqBJLc3FhssKjG7w/CeCpFReSfwBWDTKpkzPP8c+cLsK+V" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx-ext-remove-me@2.0.0/remove-me.js"></script>
 </head>
 <body class="bg-[#181818]">
-
+    
     {% include "header.html" %}
     
     <main class="bg-[#181818]  flex flex-col">
@@ -20,34 +20,14 @@
     
 
     <div id="modal-container"></div>
-
+    
+    <div id="jakiro" class="fixed top-5 inset-x-0 z-50 flex flex-col gap-2 pointer-events-none items-center"></div>
+    <script>
+    htmx.logAll();
     
 
-    <script>
-    // Flowbite initialization logic for dynamically injected HTMX content
-    document.body.addEventListener('htmx:afterSwap', function(evt) {
-        if (evt.detail.target.id === 'modal-container') {
-            const modalEl = document.getElementById('modal-div');
-            if (modalEl) {
-                // Initialize and show Flowbite modal instance
-                const modal = new Modal(modalEl, { backdrop: 'static' });
-                modal.show();
-
-                // SIMPAN instance modal ke elemen DOM agar bisa dipanggil tombol close
-                modalEl._flowbiteModal = modal;
-                
-                // Cleanup container & backdrop ketika modal ditutup via Flowbite API
-                modalEl.addEventListener('hide.fb.modal', () => {
-                    setTimeout(() => { 
-                        modalEl.remove(); 
-                        document.querySelectorAll('[modal-backdrop]').forEach(el => el.remove());
-                        document.body.classList.remove('overflow-hidden');
-                    }, 300);
-                });
-            }
-        }
-    });
-</script>
+    </script>
+    
 
 </body>
 </html>
