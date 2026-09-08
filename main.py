@@ -1,9 +1,9 @@
-from fastapi import FastAPI,Request,HTTPException, Query
+from fastapi import FastAPI,Request,HTTPException, Query,Form
 from fastapi.responses import HTMLResponse,JSONResponse
 from fastapi.templating import Jinja2Templates
 import uvicorn
 from contextlib import asynccontextmanager
-from sqlmodel import Session,select,func
+from sqlmodel import Session,select,func,update
 from database import SessionDep, create_db_and_tables
 from models import ModelsTams
 from dotenv import load_dotenv
@@ -46,38 +46,30 @@ async def get_modal(request:Request):
 async def get_modal(request:Request):
     return jinja.TemplateResponse(request,"manage_modal.html")
 
-@app.post('/add-models')
+@app.post('/add-models/')
 def add_models(modelstams:ModelsTams, session:SessionDep):
     return add_models_db(modelstams=modelstams,session=session)
     
-# @app.get('/add-models-ui/')
-# async def add_models_ui(
-#     request:Request, 
-#     session:SessionDep):
-#     modelId_dict=await request.json()
-#     modelId=str(modelId_dict['modelId'])
+@app.post("/api/favorite/",response_class=HTMLResponse)
+async def api_favorite(request:Request,session:SessionDep,projectName:str=Form(...)):
     
+    is_liked(session=session,is_liked=True,projectName=projectName,)
     
-#     model_exists=check_models_db(modelId=modelId,session=session)
-#     print(model_exists,type(model_exists))
+    return jinja.TemplateResponse(request,"components/active_favorite_button.html",context={
+            "object": {
+                "projectName": projectName
+            }
+        })
+
+@app.delete("/api/favorite/",response_class=HTMLResponse)
+async def delete_api_favorite(request:Request,projectName:str,session:SessionDep):
+    is_liked(session=session,is_liked=False,projectName=projectName)
     
-#     if model_exists is None:
-#         try:
-#             model_data=await fetch_model_data(modelId=modelId)
-            
-#             try:
-#                 return add_models_db(modelstams=model_data['model'],session=session)
-#             except Exception as e:
-#                 print(e)
-                
-#         except Exception as e:
-#             print(e)
-        
-#     else:
-#         raise HTTPException(
-#             status_code=409, 
-#             detail="Model sudah ada di database."
-#         )
+    return jinja.TemplateResponse(request,"components/inactive_favorite_button.html",context={
+            "object": {
+                "projectName": projectName
+            }
+        })
     
 @app.get('/add-models-ui/',response_class=HTMLResponse)
 async def add_models_ui(
@@ -129,7 +121,15 @@ async def fetch_model_data(modelId):
 #----------------- DB FUNCTION------------------------
 def add_models_db(modelstams:dict, session:Session):
     max_stack_order=select(func.max(ModelsTams.stack_order)).where(ModelsTams.projectName == modelstams['projectName']).scalar_subquery()
-    new_model=ModelsTams(stack_order=func.coalesce(max_stack_order, 0)+1,**modelstams)
+    
+    query_like_by_projectName=select(func.max(ModelsTams.is_liked).over(partition_by=ModelsTams.projectName)).where(ModelsTams.projectName == modelstams['projectName'])
+    list_like_by_projectName=session.exec(query_like_by_projectName).all()
+    if list_like_by_projectName != []:
+        like_by_projectName = list_like_by_projectName[0]
+    else:
+        like_by_projectName = False
+    
+    new_model=ModelsTams(stack_order=func.coalesce(max_stack_order, 0)+1,is_liked=like_by_projectName,**modelstams)
     
     try:
         session.add(new_model)
@@ -151,11 +151,19 @@ def check_models_db(modelId:str, session:Session):
     return model
 
 def firstTenModels(session:Session):
-    statement=select(ModelsTams.projectName,ModelsTams.name,ModelsTams.showcaseImageUrls).distinct().where(ModelsTams.stack_order == 1).limit(20)
+    statement=select(ModelsTams.projectName,ModelsTams.name,ModelsTams.showcaseImageUrls,ModelsTams.is_liked).distinct().where(ModelsTams.stack_order == 1).limit(20)
     result=session.exec(statement).all()
     
     return result
 
+def is_liked(session:Session,is_liked:bool,projectName:str):   
+    statement=update(ModelsTams).where(ModelsTams.projectName == projectName).values(is_liked=is_liked)
+    result=session.exec(statement)
+    session.commit()
+
+    
+    return result
+    
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
