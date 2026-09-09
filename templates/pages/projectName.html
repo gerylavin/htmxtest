@@ -5,8 +5,81 @@
 
 <!-- Ngisi slot content -->
 {% block content %}
-    
 
+<div class="min-h-screen bg-[#181818] text-[#dfdfdf] p-2 md:p-6">
+  
+  <!-- 1. HEADER (Mobile: Numpuk/Wrap, Desktop: Sejajar) -->
+    <section class="flex items-center gap-2 mb-4">
+        <div class="text-[#dfdfdf] font-semibold lg:text-4xl text-3xl max-w-4/5">
+            <h1 class="truncate pb-1">{{ ModelsTams.projectName }}</h1>
+        </div>
+
+        <div class="bg-[#28a99e]/20 rounded-xl text-sm text-[#28a99e] px-2">
+            <span class="brightness-125 inline-block">{{ ModelsTams.modelType }}</span>
+        </div>
+    </section>
+
+
+  <!-- 3. VERSION TABS (Scroll horizontal kalau layar sempit) -->
+  <div class="flex items-center gap-2 overflow-x-auto pb-2 mb-4 no-scrollbar">
+    {% for item in version_orderby_stackorder %}
+    {% set is_active = (item.id == targetId) %}
+    {% set item_style = "bg-[#dfdfdf] text-[#181818]" if is_active else "bg-[#181818] text-[#dfdfdf]" %}
+
+    <a href="/api/models/{{ item.id }}" class="px-3 py-1.5 border border-[#343434] {{ item_style }} rounded-lg text-xs font-medium whitespace-nowrap">{{ item.name }}</a>
+    
+    {% endfor %}
+  </div>
+
+  <!-- 4. MAIN CONTENT AREA (Mobile: Stack flex-col | Desktop: Row flex-row) -->
+  <div class="flex flex-col lg:flex-row gap-6 items-start">
+    
+    <!-- LEFT: Preview Image Box -->
+    <div class="w-full flex-1 bg-[#181818] rounded-2xl p-6 flex flex-col items-center justify-center relative min-h-[350px] lg:min-h-[500px]">
+      
+        <img src="{{ ModelsTams.showcaseImageUrls[0] }}" class="max-w-full max-h-[400px] object-contain rounded-lg" />
+      
+    </div>
+
+    <!-- RIGHT/BOTTOM: Action Buttons + Sidebar Cards -->
+    <div class="w-full lg:w-[360px] flex flex-col gap-4 shrink-0">
+      
+      <!-- Action Buttons Row -->
+      <div class="flex items-center gap-2">
+        <button  type="button" class="place-items-center h-10 w-3/4 px-10 gap-1 text-white bg-gradient-to-br from-teal-700 to-lime-200 font-medium rounded-xl text-sm inline-flex items-center justify-center cursor-pointer transition-all hover:opacity-90 shrink-0">
+            <iconpark-icon class="text-lg flex items-center" size="1em">
+                <template shadowrootmode="open">
+                    <svg class="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"> <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 18V6l8 6-8 6Z"/> 
+                    </svg>
+                </template>
+            </iconpark-icon>
+            <span>Run</span>
+            <span>{{ ModelsTams.total_used | format_k }}</span>
+        </button>
         
+      </div>
+
+      <!-- Version Detail Card -->
+      <div class="bg-[#2a2a2a]  rounded-xl p-4 space-y-3 text-xs">
+        <div class="flex justify-between text-[#8a8a8a]">
+          <span>Base Model</span>
+          <span class="text-[#dfdfdf]">{{ ModelsTams.baseModel }}</span>
+        </div>
+        <div class="flex justify-between text-[#8a8a8a] items-center">
+          <span>Trigger Words</span>
+          <span class="bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded text-[11px] font-mono">{{ ModelsTams.triggerWords }}</span>
+        </div>
+        <div class="flex justify-between text-[#8a8a8a] gap-4">
+          <span>Description</span>
+          <span class="text-[#dfdfdf]">{{ ModelsTams.description }}</span>
+        </div>
+      </div>
+
+
+
+    </div>
+
+  </div>
+</div>
        
 {% endblock %}

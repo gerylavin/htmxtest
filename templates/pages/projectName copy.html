@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+<!-- Ngisi slot title -->
+{% block title %}{% endblock %}
+
+<!-- Ngisi slot content -->
+{% block content %}
+    <section class="flex items-center p-5 gap-2">
+        <div class="text-[#dfdfdf] font-semibold lg:text-5xl text-4xl w-4/5">
+            <h1 class="truncate">QMAZTRPLXBNKWECVJHSYDFUGIORTAPZXLMQBNEKWHCYVJSDife</h1>
+        </div>
+
+        <div class="bg-[#28a99e]/20 rounded-xl text-sm text-[#28a99e] px-2">
+            <span class="brightness-125 inline-block">LOKR</span>
+        </div>
+    </section>
+
+    <section class="grid lg:grid-cols-4 gap-4">
+
+        <div class="col-span-3">04</div>
+    
+            <div class="border border-red-500">
+            <div class="grid place-items-center">
+                <button  type="button" class="place-items-center h-10 w-3/4 px-10 gap-1 text-white bg-gradient-to-br from-teal-700 to-lime-200 font-medium rounded-xl text-sm inline-flex items-center justify-center cursor-pointer transition-all hover:opacity-90 shrink-0">
+                    <iconpark-icon class="text-lg flex items-center" size="1em">
+                        <template shadowrootmode="open">
+                            <svg class="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"> <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 18V6l8 6-8 6Z"/> 
+                            </svg>
+                        </template>
+                    </iconpark-icon>
+                    <span>Run</span>
+                    <span>17k</span>
+                </button>
+            </div>
+
+            <div>01</div>
+            <div>01</div>
+        </div>
+    </section>
+    
+    
+<div class="min-h-screen bg-[#181818] text-[#dfdfdf] p-2 md:p-6 font-sans">
+  
+  <!-- 1. HEADER (Mobile: Numpuk/Wrap, Desktop: Sejajar) -->
+    <section class="flex items-center p-2 gap-2">
+        <div class="text-[#dfdfdf] font-semibold lg:text-5xl text-4xl w-4/5">
+            <h1 class="truncate">QMAZTRPLXBNKWECVJHSYDFUGIORTAPZXLMQBNEKWHCYVJSDife</h1>
+        </div>
+
+        <div class="bg-[#28a99e]/20 rounded-xl text-sm text-[#28a99e] px-2">
+            <span class="brightness-125 inline-block">LOKR</span>
+        </div>
+    </section>
+
+
+  <!-- 3. VERSION TABS (Scroll horizontal kalau layar sempit) -->
+  <div class="flex items-center gap-2 overflow-x-auto pb-2 mb-4 no-scrollbar">
+    <button class="p-2 border border-zinc-800 [#181818] rounded-lg text-xs">+</button>
+    <button class="px-3 py-1.5 border border-zinc-800 [#181818] rounded-lg text-xs font-medium whitespace-nowrap">v2-4000</button>
+    <button class="px-3 py-1.5 border border-zinc-800 [#181818] rounded-lg text-xs font-medium whitespace-nowrap">v2-3500</button>
+    <button class="px-3 py-1.5 border border-zinc-800 [#181818] rounded-lg text-xs font-medium whitespace-nowrap">v2-3000</button>
+    <button class="px-3 py-1.5 bg-zinc-200 text-zinc-950 font-bold rounded-lg text-xs whitespace-nowrap">v1-3000</button>
+  </div>
+
+  <!-- 4. MAIN CONTENT AREA (Mobile: Stack flex-col | Desktop: Row flex-row) -->
+  <div class="flex flex-col lg:flex-row gap-6 items-start">
+    
+    <!-- LEFT: Preview Image Box -->
+    <div class="w-full flex-1 bg-zinc-900/30 border border-zinc-800/50 rounded-2xl p-6 flex flex-col items-center justify-center relative min-h-[350px] lg:min-h-[500px]">
+      <img src="/logo-preview.png" alt="Preview" class="max-w-full max-h-[400px] object-contain rounded-lg" />
+      
+      <!-- Badge Bawah Image -->
+      <button class="mt-6 bg-zinc-900/80 border border-zinc-800 text-zinc-300 text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+        👍 Buffet
+      </button>
+    </div>
+
+    <!-- RIGHT/BOTTOM: Action Buttons + Sidebar Cards -->
+    <div class="w-full lg:w-[360px] flex flex-col gap-4 shrink-0">
+      
+      <!-- Action Buttons Row -->
+      <div class="flex items-center gap-2">
+        <button  type="button" class="place-items-center h-10 w-3/4 px-10 gap-1 text-white bg-gradient-to-br from-teal-700 to-lime-200 font-medium rounded-xl text-sm inline-flex items-center justify-center cursor-pointer transition-all hover:opacity-90 shrink-0">
+            <iconpark-icon class="text-lg flex items-center" size="1em">
+                <template shadowrootmode="open">
+                    <svg class="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"> <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 18V6l8 6-8 6Z"/> 
+                    </svg>
+                </template>
+            </iconpark-icon>
+            <span>Run</span>
+            <span>17k</span>
+        </button>
+        
+      </div>
+
+      <!-- Version Detail Card -->
+      <div class="bg-zinc-900/50 border border-zinc-800/80 rounded-xl p-4 space-y-3 text-xs">
+        <div class="flex justify-between text-zinc-400">
+          <span>Base Model</span>
+          <span class="text-zinc-200">KREA_2</span>
+        </div>
+        <div class="flex justify-between text-zinc-400 items-center">
+          <span>Trigger Words</span>
+          <span class="bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded text-[11px] font-mono">ohwx</span>
+        </div>
+      </div>
+
+
+
+    </div>
+
+  </div>
+</div>
+       
+{% endblock %}

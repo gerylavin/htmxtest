@@ -12,7 +12,7 @@ class ModelsTams(SQLModel, table=True):
     modelType:str = Field(index=True)
     description:str | None =Field(default=None)
     triggerWords:str | None =Field(default=None)
-    showcaseImageUrls: List[str] = Field(default=[],sa_column=Column(JSON))
+    showcaseImageUrls: List[str] = Field(default_factory=list,sa_type=JSON)
     
     #By myself:
     stack_order:int | None = Field(default=None)

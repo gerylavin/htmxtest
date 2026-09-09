@@ -23,18 +23,18 @@
                 {{ object.projectName }}
             </h3>
 
-            <button class="text-neutral-400 hover:text-white transition shrink-0">
+            <a href="/api/models/{{ object.id }}" class="cursor-pointer text-neutral-400 hover:text-white transition shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
                 </svg>
-            </button>
+            </a>
         </div>
 
         <!-- Dropdown Versi (Lebar penuh & seragam di setiap card) -->
         <!-- Container Dropdown dengan Position Relative -->
-        <details name="dropdown-versi" class="relative group">
+        <details onfocusout="if (!this.contains(event.relatedTarget)) this.removeAttribute('open')" name="dropdown-versi" class="relative group">
             <!-- Tombol Pemicu (Header Dropdown) -->
-            <summary hx-get="/api/stack-order-card/{{ object.projectName }}" hx-vals='{"targetId":"{{ object.id }}"}' hx-swap="innerHTML" hx-target="#stack-order-popup-{{ object.id }}" class="list-none cursor-pointer min-w-20 max-w-20 flex items-center justify-between gap-1 bg-[#404040] text-neutral-300 text-xs font-medium px-3 py-1.5 rounded-xl border border-transparent hover:border-[#28a99e] transition-colors select-none">
+            <summary hx-get="/api/stack-order-card/{{ object.projectName }}" hx-vals='{"targetId":"{{ object.id }}"}' hx-swap="innerHTML" hx-target="#stack-order-popup-{{ object.id }}" class="list-none cursor-pointer min-w-25 max-w-25 flex items-center justify-between gap-1 bg-[#404040] text-neutral-300 text-sm font-medium px-3 py-1.5 rounded-xl border border-transparent hover:border-[#28a99e] transition-colors select-none">
                 <span class="overflow-hidden whitespace-nowrap min-w-0">{{ object.name }}</span>
                 <!-- Ikon Panah (Otomatis berputar saat terbuka) -->
                 <svg class="w-3.5 h-3.5 text-neutral-400 shrink-0 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
