@@ -70,6 +70,7 @@ async def delete_api_favorite(request:Request,projectName:str,session:SessionDep
                 "projectName": projectName
             }
         })
+
     
 @app.get('/add-models-ui/',response_class=HTMLResponse)
 async def add_models_ui(
@@ -105,6 +106,36 @@ async def add_models_ui(
         # )
         
 
+@app.get('/api/stack-order-card/{projectName}',response_class=HTMLResponse)
+async def stack_order_card(
+    request:Request,
+    projectName: str,
+    targetId:str, 
+    session:SessionDep):
+    statement=select(ModelsTams.id,ModelsTams.projectName,ModelsTams.name,ModelsTams.stack_order).where(ModelsTams.projectName == projectName)
+    result=session.exec(statement).all()
+    
+    return jinja.TemplateResponse(
+        request,
+        "components/stack_order_popup.html",
+        context={
+            "list_names_by_projectName":result,
+            "targetId":targetId
+        }
+    )
+@app.get('/api/change-card/',response_class=HTMLResponse)
+async def change_card(request:Request,modelId:str,session:SessionDep):
+    
+    result=get_items_by_id(session=session,modelId=modelId)
+    
+    return jinja.TemplateResponse(
+        request,
+        "components/changed_card.html",
+        context={
+            "object": result[0]
+        }
+        
+    )
 #----------------- TAMS FUNCTION------------------------
 async def fetch_model_data(modelId):
     url=f"{TAMS_URL}/v1/models/{modelId}"
@@ -151,7 +182,7 @@ def check_models_db(modelId:str, session:Session):
     return model
 
 def firstTenModels(session:Session):
-    statement=select(ModelsTams.projectName,ModelsTams.name,ModelsTams.showcaseImageUrls,ModelsTams.is_liked).distinct().where(ModelsTams.stack_order == 1).limit(20)
+    statement=select(ModelsTams.id,ModelsTams.projectName,ModelsTams.name,ModelsTams.showcaseImageUrls,ModelsTams.is_liked).distinct().where(ModelsTams.stack_order == 1).limit(20)
     result=session.exec(statement).all()
     
     return result
@@ -163,7 +194,13 @@ def is_liked(session:Session,is_liked:bool,projectName:str):
 
     
     return result
+
+def get_items_by_id(session:Session,modelId:str):
+    statement=select(ModelsTams.id,ModelsTams.projectName,ModelsTams.name,ModelsTams.showcaseImageUrls,ModelsTams.is_liked).where(ModelsTams.id == modelId)
+    result=session.exec(statement).all()
     
+    return result
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",

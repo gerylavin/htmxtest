@@ -1,0 +1,7 @@
+{% for item in list_names_by_projectName %}
+{% set is_active = (item.id == targetId) %}
+{% set item_style = "text-[#28a99e]" if is_active else "text-[#dfdfdf]" %}
+<button hx-get="/api/change-card/" hx-vals='{"modelId":"{{ item.id }}"}' hx-swap="outerHTML" hx-target="#card-{{ targetId }}" hx-trigger="click" type="button" class="cursor-pointer block px-3 py-1.5 text-sm w-full text-left hover:bg-[#28a99e] hover:text-white transition-colors {{ item_style }}">
+    {{ item.name }}
+</button>
+{% endfor %}
