@@ -3,22 +3,24 @@ from fastapi.responses import HTMLResponse,JSONResponse
 from fastapi.templating import Jinja2Templates
 import uvicorn
 from contextlib import asynccontextmanager
-from sqlmodel import select,func,update
+
 from database import SessionDep, create_db_and_tables,engine
 from models import ModelsTams
-from dotenv import load_dotenv
-import os
-import httpx
-import asyncio
+from TAMS_functions import fetch_model_data
+from db_functions import (
+    stack_order_popup_db,
+    page_of_a_model_db,
+    add_models_db,
+    check_models_db,
+    firstLoadModels,
+    is_liked,
+    get_items_by_id
+)
 import json
 from fastapi.staticfiles import StaticFiles
 from typing import Annotated
-from sqlmodel.ext.asyncio.session import AsyncSession
 
-load_dotenv()
 
-TAMS_TOKEN=os.environ['TAMS_TOKEN']
-TAMS_URL=os.environ['TAMS_URL']
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -35,11 +37,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get('/',response_class=HTMLResponse)
 async def home(request:Request,session:SessionDep):
-    tenObjects=await firstTenModels(session=session)
-  
-    print(tenObjects)
-    for i in tenObjects:
-        print(i.showcaseImageUrls[0])
+    tenObjects=await firstLoadModels(session=session)
     
     return jinja.TemplateResponse(request,"index.html",context={"tenObjects":tenObjects})
 
@@ -114,13 +112,13 @@ async def add_models_ui(
         
 
 @app.get('/api/stack-order-card/{projectName}',response_class=HTMLResponse)
-async def stack_order_card(
+async def stack_order_popup(
     request:Request,
     projectName: str,
     targetId:str, 
     session:SessionDep):
-    statement=select(ModelsTams.id,ModelsTams.projectName,ModelsTams.name,ModelsTams.stack_order).where(ModelsTams.projectName == projectName)
-    result=(await session.exec(statement)).all()
+    
+    result=await stack_order_popup_db(session=session,projectName=projectName)
     
     return jinja.TemplateResponse(
         request,
@@ -147,88 +145,20 @@ async def change_card(request:Request,modelId:str,session:SessionDep):
     
 @app.get('/api/models/{modelId}',response_class=HTMLResponse)
 async def page_of_a_model(request:Request,modelId:str,session:SessionDep):
-    statement=select(ModelsTams).where(ModelsTams.id == modelId)
-    result=await session.scalar(statement)
-    projectName=result.projectName
-    print("projectname",projectName)
-    statement2=select(ModelsTams.name,ModelsTams.id,ModelsTams.stack_order).where(ModelsTams.projectName == projectName).order_by(ModelsTams.stack_order)
-    version_orderby_stackorder=(await session.exec(statement2)).all()
+    full_data_model,version_orderby_stackorder = await page_of_a_model_db(session=session,modelId=modelId)
     
     return jinja.TemplateResponse(
         request,
         "pages/projectName.html",
         context={
-            "ModelsTams":result,
+            "ModelsTams":full_data_model,
             "version_orderby_stackorder":version_orderby_stackorder,
             "targetId":modelId
         }
         
     )
     
-#----------------- TAMS FUNCTION------------------------
-async def fetch_model_data(modelId):
-    url=f"{TAMS_URL}/v1/models/{modelId}"
-    headers = {
-    'Accept': 'application/json',
-    'Authorization': f'Bearer {TAMS_TOKEN}'
-    }
-    async with httpx.AsyncClient() as client:
-        response = await client.get(url=url,headers=headers)
-        return response.json()
 
-
-
-#----------------- DB FUNCTION------------------------
-async def add_models_db(modelstams:dict, session:AsyncSession):
-    max_stack_order=await select(func.max(ModelsTams.stack_order)).where(ModelsTams.projectName == modelstams['projectName']).scalar_subquery()
-    
-    query_like_by_projectName=select(func.max(ModelsTams.is_liked).over(partition_by=ModelsTams.projectName)).where(ModelsTams.projectName == modelstams['projectName'])
-    list_like_by_projectName= (await session.exec(query_like_by_projectName)).all()
-    if list_like_by_projectName != []:
-        like_by_projectName = list_like_by_projectName[0]
-    else:
-        like_by_projectName = False
-    
-    new_model=ModelsTams(stack_order=func.coalesce(max_stack_order, 0)+1,is_liked=like_by_projectName,**modelstams)
-    
-    try:
-        await session.add(new_model)
-        
-    except Exception as e:
-        print(e)
-    else:
-        print("Model added sucessfully")
-        
-    await session.commit()
-    await session.refresh(new_model)
-    
-    return new_model
-
-async def check_models_db(modelId:str, session:AsyncSession):
-    
-    model=await session.get(ModelsTams,modelId)
-    
-    return model
-
-async def firstTenModels(session:AsyncSession):
-    statement=select(ModelsTams.id,ModelsTams.projectName,ModelsTams.name,ModelsTams.showcaseImageUrls,ModelsTams.is_liked).distinct().where(ModelsTams.stack_order == 1).limit(20)
-    result=(await session.exec(statement)).all()
-    
-    return result
-
-async def is_liked(session:AsyncSession,is_liked:bool,projectName:str):   
-    statement=update(ModelsTams).where(ModelsTams.projectName == projectName).values(is_liked=is_liked)
-    result= await session.exec(statement)
-    await session.commit()
-
-    
-    return result
-
-async def get_items_by_id(session:AsyncSession,modelId:str):
-    statement=select(ModelsTams.id,ModelsTams.projectName,ModelsTams.name,ModelsTams.showcaseImageUrls,ModelsTams.is_liked).where(ModelsTams.id == modelId)
-    result=(await session.exec(statement)).all()
-    
-    return result
 
 #----------------- HELPER FUNCTION------------------------
 # 1. Bikin fungsi helper format angka
@@ -248,6 +178,8 @@ def format_k(value: int | float) -> str:
         return str(value)
 
 jinja.env.filters["format_k"] = format_k
+
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
